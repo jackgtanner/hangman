@@ -1,3 +1,9 @@
+  require 'colorize'
+  require 'yaml'
+  require 'pry'
+
+
+  
   class Player
       def initialize (name)
         @name = name
@@ -91,9 +97,12 @@
 
       def get_new_code
         @temp = File.readlines('5desk.txt').sample.downcase
+        until (@temp.length > 5)
+            @temp = File.readlines('5desk.txt').sample.downcase
+        end
         @hangman = []
         @hangman = @temp.split("")
-        for i in 0..3
+        for i in 0..1
             @hangman.pop
         end
         @hangman = @hangman.join
@@ -131,12 +140,11 @@
     end
 
 
-  class Game
+  class Game 
       def initialize
           puts "\n\nWelcome to Hangman!"
           puts "What's your name?"
           @player = Player.new(gets.chomp)
-        #   @player = Player.new("Jack")
           print "\nHey #{@player.name}, lets get started!"
           sleep(0.5)
           print "!"
@@ -145,15 +153,15 @@
           sleep(0.5)
           print "!"
           puts "\n\n"
-
+          @board = Board.new()
+          self.play
       end
 
       def play
-            @board = Board.new()
-            @game_over = false
+            game_over = false
             @failed_moves = 0
             @moves = 0
-            until @game_over
+            until game_over
                 @board.display_board(@failed_moves)
                 puts "\nChoose a letter to play:\n\n"
                 #Get input and check it's valid
@@ -169,7 +177,7 @@
                     @failed_moves += 1
                  end
                  if @board.check_win == true
-                    @game_over = true
+                    game_over = true
                     puts "Congratulations!!\n\n"
                     puts "You correclty guessed:"
                     @board.reveal_code
@@ -177,43 +185,65 @@
                  end
                  if @failed_moves == 6
                     @board.display_board(@failed_moves)
-                    @game_over = true
+                    game_over = true
                     puts "\n\nGame Over..... the word was:"
                     @board.reveal_code
                     puts "\n"
                     puts "Unlucky #{@player.name}, you didn't manage to guess the word and save the guy...   :(\n\n\n"
                  end
             end   
+        end    
+    end
+
+    
+class Menu
+    def initialize
+        display_menu
+        
+    end
+
+    def display_menu
+        input = ""
+        until input == "4"
+            puts "\n\n-----------".colorize(:green)
+            puts "| Hangman |".colorize(:green)
+            puts "-----------".colorize(:green)
+            puts "|Main Menu|".colorize(:green)
+            puts "-----------\n\n".colorize(:green)
+            puts "1) Start a new game".colorize(:cyan)
+            puts "2) Options".colorize(:cyan)
+            puts "3) Exit\n\n\n".colorize(:cyan)
+            input = gets.chomp
+            if input == "1" || ["new", "New"].include?(input)
+                @game = Game.new()
+            elsif input == "2" || ["Options", "options"].include?(input)
+                self.options
+            elsif input == "3" || ["Exit", "exit"].include?(input)
+                self.menu_exit
+            else puts "Input was'nt valid, try again"
+            end
         end
     end
 
-
-
-  game = Game.new()
-  play_again = ""
-  until play_again == "No" || play_again == "no"
-      game.play
-      puts 'Play again? Type Yes or No'
-      play_again = gets.chomp
-    until ['Yes', 'No', "yes", "no"].include?(play_again)
-      puts 'Invalid input. Type Yes or No'
-      play_again = gets.chomp
-    end
-    if play_again == "Yes" || play_again == "yes"
-        print "Great! Lets get you into another game"
+    def options
+        print "\nThis is a console game"
         sleep(0.5)
         print "."
         sleep(0.5)
-        print "."
+        print"."
         sleep(0.5)
-        print ".\n\n"
+        print"."
+        puts " there are no options."
+        sleep (1)
+        self.display_menu
     end
-  end
-  puts "That's a shame"
-  sleep (1)
-  puts "\nSee you next time\n\n"
-  
+
+    def menu_exit
+        puts "\nSee you again"
+        sleep(1)
+        exit
+    end
+end
 
 
-# game = Game.new()
-# game.play
+menu = Menu.new()
