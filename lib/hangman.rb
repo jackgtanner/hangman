@@ -1,4 +1,3 @@
-  require 'colorize'
   require 'yaml'
   require 'pry'
 
@@ -205,14 +204,14 @@ class Menu
     def display_menu
         input = ""
         until input == "4"
-            puts "\n\n-----------".colorize(:green)
-            puts "| Hangman |".colorize(:green)
-            puts "-----------".colorize(:green)
-            puts "|Main Menu|".colorize(:green)
-            puts "-----------\n\n".colorize(:green)
-            puts "1) Start a new game".colorize(:cyan)
-            puts "2) Options".colorize(:cyan)
-            puts "3) Exit\n\n\n".colorize(:cyan)
+            puts "\n\n-----------"
+            puts "| Hangman |"
+            puts "-----------"
+            puts "|Main Menu|"
+            puts "-----------\n\n"
+            puts "1) Start a new game"
+            puts "2) Options"            
+            puts "3) Exit\n\n\n"            
             input = gets.chomp
             if input == "1" || ["new", "New"].include?(input)
                 @game = Game.new()
