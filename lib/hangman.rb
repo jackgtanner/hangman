@@ -1,7 +1,3 @@
-  require 'yaml'
-  require 'pry'
-
-
   
   class Player
       def initialize (name)
